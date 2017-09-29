@@ -2,8 +2,15 @@
 
 namespace Enguys\CoreBundle\Manager;
 
+use Symfony\Component\HttpFoundation\RequestStack;
+
 class PageManager
 {
+    /**
+     * @var \Symfony\Component\HttpFoundation\RequestStack
+     */
+    private $requestStack;
+
     /**
      * @var string
      */
@@ -19,6 +26,11 @@ class PageManager
      */
     private $breadcrumbs = [];
 
+    public function __construct(RequestStack $requestStack)
+    {
+        $this->requestStack = $requestStack;
+    }
+
     /**
      * @return string
      */
@@ -29,6 +41,7 @@ class PageManager
 
     /**
      * @param string $title
+     *
      * @return $this
      */
     public function setTitle(?string $title)
@@ -48,6 +61,7 @@ class PageManager
 
     /**
      * @param string $metaTitle
+     *
      * @return $this
      */
     public function setMetaTitle(?string $metaTitle)
@@ -75,8 +89,15 @@ class PageManager
 
     public function addBreadcrumb(string $label, $href = null)
     {
-        $this->breadcrumbs[] = ['label' => $label, 'href' => is_null($href) ? '#' : $href];
+        $this->breadcrumbs[] = ['label' => $label, 'href' => $href];
 
         return $this;
+    }
+
+    public function getBodyClass()
+    {
+        $request = $this->requestStack->getCurrentRequest();
+
+        return str_replace('_', '-', $request->get('_route'));
     }
 }
