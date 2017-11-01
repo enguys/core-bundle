@@ -44,8 +44,9 @@ trait ModalTrait
     protected function redirectBack(string $fallbackUrl)
     {
         $request = $this->get('request_stack')->getCurrentRequest();
-        if ($request->query->has('destination')) {
-            return $this->redirect($request->query->get('destination'));
+        $destination = $request->query->get('destination');
+        if (!empty($destination)) {
+            return $this->redirect($destination);
         }
         $uri = $request->getUri();
         $referer = $request->headers->get('referer');
