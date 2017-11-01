@@ -1,7 +1,6 @@
 {
     "name": "enguys/core-bundle",
     "description": "Enguys core bundle.",
-    "version": "1.0.0",
     "type": "symfony-bundle",
     "authors": [
         {
