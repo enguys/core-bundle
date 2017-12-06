@@ -11,7 +11,8 @@
     "require": {
       "stof/doctrine-extensions-bundle": "^1.2",
       "ramsey/uuid": "^3.7",
-      "white-october/pagerfanta-bundle": "^1.0"
+      "white-october/pagerfanta-bundle": "^1.0",
+      "vich/uploader-bundle": "^1.6"
     },
     "autoload": {
       "psr-4": {

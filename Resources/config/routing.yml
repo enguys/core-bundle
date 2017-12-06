@@ -1,0 +1,3 @@
+enguys_core_media_upload:
+    path:     /media/upload/{type}
+    defaults: { _controller: EnguysCoreBundle:Media:upload }

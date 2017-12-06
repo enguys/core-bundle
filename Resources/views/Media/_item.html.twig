@@ -1,0 +1,42 @@
+{% if type == 'image' %}
+  <div id="media-{{ media.id }}" class="media-upload-widget__item">
+    <div class="media-upload-widget-image"
+      data-tooltip-toggle
+      data-tooltip-title="{{ media.originalName }}">
+      <div class="b-lazy media-upload-widget-image__thumbnail"
+        data-src="{{ vich_uploader_asset(media, 'file') }}"></div>
+      <button type="button"
+        class="media-upload-widget-image__remove"
+        data-media-upload-widget-remove="{{ media.id }}">
+        Remove
+      </button>
+    </div>
+  </div>
+{% else %}
+  <tr id="media-{{ media.id }}">
+    <td data-mobile-label="File name">
+      <a target="_blank" href="{{ vich_uploader_asset(media, 'file') }}">
+        {{ media.originalName }}
+      </a>
+    </td>
+    <td data-mobile-label="Mime type">{{ media.mimeType }}</td>
+    <td data-mobile-label="Size">{{ media.size }}</td>
+    <td data-mobile-label="Action">
+      <a class="btn btn--transparent-primary"
+        target="_blank"
+        download="{{ media.originalName }}"
+        href="{{ vich_uploader_asset(media, 'file') }}"
+        data-tooltip-toggle
+        data-tooltip-title="Download">
+        <i class="fa fa-download"></i>
+      </a>
+      <button type="button"
+        class="btn btn--transparent-danger"
+        data-media-upload-widget-remove="{{ media.id }}"
+        data-tooltip-toggle
+        data-tooltip-title="Remove">
+        <i class="fa fa-trash"></i>
+      </button>
+    </td>
+  </tr>
+{% endif %}

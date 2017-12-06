@@ -10,3 +10,8 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: form.type }
+    enguys_core.form.type.media_upload:
+        class: Enguys\CoreBundle\Form\Type\MediaUploadType
+        arguments: ['@doctrine.orm.entity_manager', '@router']
+        tags:
+            - { name: form.type }
