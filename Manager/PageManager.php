@@ -12,14 +12,29 @@ class PageManager
     private $requestStack;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $title;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $metaTitle;
+
+    /**
+     * @var string|null
+     */
+    private $metaAuthor;
+
+    /**
+     * @var string|null
+     */
+    private $metaDescription;
+
+    /**
+     * @var array
+     */
+    private $metaKeywords = [];
 
     /**
      * @var array
@@ -32,7 +47,7 @@ class PageManager
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getTitle(): ?string
     {
@@ -40,11 +55,11 @@ class PageManager
     }
 
     /**
-     * @param string $title
+     * @param null|string $title
      *
-     * @return $this
+     * @return \Enguys\CoreBundle\Manager\PageManager
      */
-    public function setTitle(?string $title)
+    public function setTitle(?string $title): PageManager
     {
         $this->title = $title;
 
@@ -52,7 +67,7 @@ class PageManager
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getMetaTitle(): ?string
     {
@@ -60,11 +75,11 @@ class PageManager
     }
 
     /**
-     * @param string $metaTitle
+     * @param null|string $metaTitle
      *
-     * @return $this
+     * @return \Enguys\CoreBundle\Manager\PageManager
      */
-    public function setMetaTitle(?string $metaTitle)
+    public function setMetaTitle(?string $metaTitle): PageManager
     {
         $this->metaTitle = $metaTitle;
 
@@ -81,23 +96,108 @@ class PageManager
 
     /**
      * @param array $breadcrumbs
+     *
+     * @return \Enguys\CoreBundle\Manager\PageManager
      */
-    public function setBreadcrumbs(array $breadcrumbs)
+    public function setBreadcrumbs(array $breadcrumbs): PageManager
     {
         $this->breadcrumbs = $breadcrumbs;
+
+        return $this;
     }
 
-    public function addBreadcrumb(string $label, $href = null)
+    /**
+     * @param string $label
+     * @param null $href
+     *
+     * @return \Enguys\CoreBundle\Manager\PageManager
+     */
+    public function addBreadcrumb(string $label, $href = null): PageManager
     {
         $this->breadcrumbs[] = ['label' => $label, 'href' => $href];
 
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function getBodyClass()
     {
         $request = $this->requestStack->getCurrentRequest();
 
         return str_replace('_', '-', $request->get('_route'));
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getMetaAuthor(): ?string
+    {
+        return $this->metaAuthor;
+    }
+
+    /**
+     * @param string $metaAuthor
+     *
+     * @return \Enguys\CoreBundle\Manager\PageManager
+     */
+    public function setMetaAuthor(?string $metaAuthor): PageManager
+    {
+        $this->metaAuthor = $metaAuthor;
+
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getMetaDescription(): ?string
+    {
+        return $this->metaDescription;
+    }
+
+    /**
+     * @param string $metaDescription
+     *
+     * @return \Enguys\CoreBundle\Manager\PageManager
+     */
+    public function setMetaDescription(?string $metaDescription): PageManager
+    {
+        $this->metaDescription = $metaDescription;
+
+        return $this;
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getMetaKeywords(): array
+    {
+        return array_unique($this->metaKeywords);
+    }
+
+    /**
+     * @param array[] $metaKeywords
+     *
+     * @return \Enguys\CoreBundle\Manager\PageManager
+     */
+    public function setMetaKeywords(array $metaKeywords): PageManager
+    {
+        $this->metaKeywords = $metaKeywords;
+
+        return $this;
+    }
+
+    /**
+     * @param string $keyword
+     *
+     * @return \Enguys\CoreBundle\Manager\PageManager
+     */
+    public function addMetaKeyword(string $keyword): PageManager
+    {
+        $this->metaKeywords[] = $keyword;
+
+        return $this;
     }
 }

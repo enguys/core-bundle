@@ -15,3 +15,8 @@ services:
         arguments: ['@doctrine.orm.entity_manager', '@router']
         tags:
             - { name: form.type }
+    enguys_core.templating.core:
+        class: Enguys\CoreBundle\Templating\EnguysCoreExtension
+        arguments: ['@enguys_core.manager.page']
+        tags:
+            - { name: 'twig.extension' }
