@@ -11,6 +11,8 @@ class PageManager
      */
     private $requestStack;
 
+    private $config;
+
     /**
      * @var string|null
      */
@@ -39,11 +41,26 @@ class PageManager
     /**
      * @var array
      */
+    private $ogProperties = [];
+
+    /**
+     * @var array
+     */
     private $breadcrumbs = [];
 
-    public function __construct(RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack, array $config = [])
     {
         $this->requestStack = $requestStack;
+        $this->config = $config;
+        if (!empty($config['page']['default_og_title'])) {
+            $this->setOgTitle($config['page']['default_og_title']);
+        }
+        if (!empty($config['page']['default_og_description'])) {
+            $this->setOgDescription($config['page']['default_og_description']);
+        }
+        if (!empty($config['page']['default_og_image'])) {
+            $this->setOgImage($config['page']['default_og_image']);
+        }
     }
 
     /**
@@ -62,6 +79,9 @@ class PageManager
     public function setTitle(?string $title): PageManager
     {
         $this->title = $title;
+        if (!in_array('og:title', $this->ogProperties)) {
+            $this->setOgTitle($title);
+        }
 
         return $this;
     }
@@ -165,6 +185,9 @@ class PageManager
     public function setMetaDescription(?string $metaDescription): PageManager
     {
         $this->metaDescription = $metaDescription;
+        if (!in_array('og:description', $this->ogProperties)) {
+            $this->setOgDescription($metaDescription);
+        }
 
         return $this;
     }
@@ -197,6 +220,131 @@ class PageManager
     public function addMetaKeyword(string $keyword): PageManager
     {
         $this->metaKeywords[] = $keyword;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOgProperties(): array
+    {
+        return $this->ogProperties;
+    }
+
+    /**
+     * @param array $ogProperties
+     *
+     * @return \Enguys\CoreBundle\Manager\PageManager
+     */
+    public function setOgProperties(array $ogProperties): PageManager
+    {
+        $this->ogProperties = $ogProperties;
+
+        return $this;
+    }
+
+    /**
+     * @param string $property
+     * @param string $content
+     *
+     * @return $this
+     */
+    public function setOgProperty(string $property, string $content)
+    {
+        $this->ogProperties[$property] = $content;
+
+        return $this;
+    }
+
+    /**
+     * @param string $property
+     *
+     * @return $this
+     */
+    public function removeOgProperty(string $property)
+    {
+        if (in_array($property, $this->ogProperties)) {
+            unset($this->ogProperties[$property]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return $this
+     */
+    public function setOgType(string $content)
+    {
+        $this->setOgProperty('og:type', $content);
+
+        return $this;
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return $this
+     */
+    public function setOgTitle(string $content)
+    {
+        $this->setOgProperty('og:title', $content);
+        if (!in_array('twitter:card', $this->ogProperties)) {
+            $this->setOgProperty('twitter:card', 'summary');
+        }
+        if (!in_array('twitter:title', $this->ogProperties)) {
+            $this->setOgProperty('twitter:title', $content);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return $this
+     */
+    public function setOgUrl(string $content)
+    {
+        $this->setOgProperty('og:url', $content);
+
+        return $this;
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return $this
+     */
+    public function setOgImage(string $content)
+    {
+        $this->setOgProperty('og:image', $content);
+        if (!in_array('twitter:card', $this->ogProperties)) {
+            $this->setOgProperty('twitter:card', 'summary');
+        }
+        if (!in_array('twitter:image', $this->ogProperties)) {
+            $this->setOgProperty('twitter:image', $content);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return $this
+     */
+    public function setOgDescription(string $content)
+    {
+        $this->setOgProperty('og:description', $content);
+        if (!in_array('twitter:card', $this->ogProperties)) {
+            $this->setOgProperty('twitter:card', 'summary');
+        }
+        if (!in_array('twitter:description', $this->ogProperties)) {
+            $this->setOgProperty('twitter:description', $content);
+        }
 
         return $this;
     }

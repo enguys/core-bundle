@@ -33,6 +33,11 @@ class EnguysCoreExtension extends \Twig_Extension
                 [$this, 'metaTagsFunction'],
                 ['is_safe' => ['html'], 'needs_environment' => true]
             ),
+            new \Twig_SimpleFunction(
+                'enguys_core_open_graph',
+                [$this, 'openGraphFunction'],
+                ['is_safe' => ['html'], 'needs_environment' => true]
+            ),
         ];
     }
 
@@ -74,6 +79,21 @@ class EnguysCoreExtension extends \Twig_Extension
             'author' => $this->pageManager->getMetaAuthor(),
             'description' => $this->pageManager->getMetaDescription(),
             'keywords' => $this->pageManager->getMetaKeywords(),
+        ]);
+    }
+
+    /**
+     * @param \Twig_Environment $environment
+     *
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function openGraphFunction(\Twig_Environment $environment)
+    {
+        return $environment->render('@EnguysCore/Page/openGraph.html.twig', [
+            'ogProperties' => $this->pageManager->getOgProperties(),
         ]);
     }
 
