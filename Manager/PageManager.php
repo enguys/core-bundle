@@ -184,6 +184,7 @@ class PageManager
      */
     public function setMetaDescription(?string $metaDescription): PageManager
     {
+        $metaDescription = $this->processDescription($metaDescription);
         $this->metaDescription = $metaDescription;
         if (!in_array('og:description', $this->ogProperties)) {
             $this->setOgDescription($metaDescription);
@@ -338,6 +339,7 @@ class PageManager
      */
     public function setOgDescription(string $content)
     {
+        $content = $this->processDescription($content);
         $this->setOgProperty('og:description', $content);
         if (!in_array('twitter:card', $this->ogProperties)) {
             $this->setOgProperty('twitter:card', 'summary');
@@ -347,5 +349,10 @@ class PageManager
         }
 
         return $this;
+    }
+
+    private function processDescription(string $content = '', int $length = 300)
+    {
+        return substr(trim(strip_tags($content)), 0, $length);
     }
 }
